@@ -24,6 +24,11 @@ class BasePage:
             EC.element_to_be_clickable(locator)
         )
 
+    def wait_for_elements_visible(self, locator, timeout=DEFAULT_TIMEOUT):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.visibility_of_all_elements_located(locator)
+        )
+
     def wait_for_url_contains(self, value, timeout=DEFAULT_TIMEOUT):
         return WebDriverWait(self.driver, timeout).until(EC.url_contains(value))
 
@@ -35,6 +40,9 @@ class BasePage:
             EC.presence_of_all_elements_located(locator)
         )
         return self.driver.find_elements(*locator)
+
+    def find_all_visible(self, locator, timeout=DEFAULT_TIMEOUT):
+        return self.wait_for_elements_visible(locator, timeout)
 
     def click(self, locator, timeout=DEFAULT_TIMEOUT):
         self.wait_for_element_clickable(locator, timeout).click()

@@ -35,6 +35,7 @@ class ProductsPage(BasePage):
 
     def open_cart(self):
         self.click(self.CART_LINK)
+        self.wait_for_url_contains("cart.html")
 
     def _find_product_card(self, product_name):
         for product in self.find_all(self.INVENTORY_ITEMS):
