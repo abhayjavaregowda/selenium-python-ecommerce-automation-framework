@@ -26,12 +26,33 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Set up Chrome
+        id: setup-chrome
+        if: matrix.browser == 'chrome'
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Set up Firefox
+        if: matrix.browser == 'firefox'
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Show browser versions
+        run: |
+          chrome --version || true
+          google-chrome --version || true
+          firefox --version || true
+
       - name: Run Selenium tests
+        env:
+          CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
           pytest --browser=${{ matrix.browser }} --headless --html=reports/${{ matrix.browser }}-report.html --self-contained-html
 

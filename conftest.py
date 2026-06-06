@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -56,12 +58,17 @@ def driver(request, monkeypatch):
 def _create_driver(browser, headless):
     if browser == "chrome":
         options = ChromeOptions()
+        chrome_binary = os.getenv("CHROME_BINARY") or os.getenv("CHROME_BIN")
+        if chrome_binary:
+            options.binary_location = chrome_binary
         if headless:
             options.add_argument("--headless=new")
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--remote-allow-origins=*")
         service = ChromeService(ChromeDriverManager().install())
         return webdriver.Chrome(service=service, options=options)
 
