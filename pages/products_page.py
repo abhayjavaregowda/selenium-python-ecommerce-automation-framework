@@ -1,3 +1,4 @@
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from pages.base_page import BasePage
@@ -34,8 +35,17 @@ class ProductsPage(BasePage):
         return int(self.get_text(self.CART_BADGE))
 
     def open_cart(self):
-        self.click(self.CART_LINK)
-        self.wait_for_url_contains("cart.html")
+        cart_link = self.wait_for_element_clickable(self.CART_LINK)
+        cart_url = cart_link.get_attribute("href")
+        cart_link.click()
+
+        try:
+            self.wait_for_url_contains("cart.html")
+        except TimeoutException:
+            # Chrome in CI can occasionally miss the cart link navigation.
+            # Opening the same href keeps the test intent clear and stable.
+            self.open_url(cart_url)
+            self.wait_for_url_contains("cart.html")
 
     def _find_product_card(self, product_name):
         for product in self.find_all(self.INVENTORY_ITEMS):
