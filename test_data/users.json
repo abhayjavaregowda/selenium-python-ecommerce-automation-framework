@@ -1,0 +1,27 @@
+{
+  "users": {
+    "standard": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "locked_out": {
+      "username": "locked_out_user",
+      "password": "secret_sauce",
+      "expected_error": "Epic sadface: Sorry, this user has been locked out."
+    },
+    "invalid": {
+      "username": "invalid_user",
+      "password": "wrong_password",
+      "expected_error": "Epic sadface: Username and password do not match any user in this service"
+    }
+  },
+  "products": {
+    "backpack": "Sauce Labs Backpack",
+    "bike_light": "Sauce Labs Bike Light"
+  },
+  "checkout_information": {
+    "first_name": "Abhay",
+    "last_name": "Tester",
+    "postal_code": "560001"
+  }
+}
